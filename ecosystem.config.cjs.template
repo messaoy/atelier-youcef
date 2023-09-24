@@ -1,0 +1,18 @@
+module.exports = {
+  apps: [
+    {
+      name: "atelier-youcef",
+      script: "server.js",
+      instances: 1,
+      exec_mode: "cluster",
+      watch: true,
+      merge_logs: true,
+      type: "module",
+      cwd: "/home/ec2-user/atelier-youcef",
+      interpreter: "node",`
+      env: {
+        NODE_ENV: "production",
+      },
+    },
+  ],
+}
