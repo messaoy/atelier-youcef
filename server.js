@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import playerRouter from "./router/player/playerRouter.js";
+import playerRouter from './router/player/playerRouter.js';
 
 dotenv.config();
 

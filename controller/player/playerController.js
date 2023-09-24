@@ -1,17 +1,15 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 import fs from 'fs';
 import {
   getCountryWithHighestRatio,
   getPlayersAverageBMI, getPlayersHeightMedian,
-} from "../../utils/utils.js";
+} from '../../utils/utils.js';
 
 dotenv.config();
 
 const pathToFile = process.env.DATA_FILE_PATH;
 
-export class PlayerController {
-  constructor() {}
-
+class PlayerController {
   async getAllPlayers(req, res) {
     const readStream = fs.createReadStream(pathToFile);
     let data = '';
@@ -26,18 +24,18 @@ export class PlayerController {
           const sortedPlayers = [...players].sort((a, b) => a.data.rank - b.data.rank);
           res.status(200).json(sortedPlayers);
         } catch (err) {
-          res.status(400).json({ message: 'An error has occurred while reading the file'});
+          res.status(400).json({ message: 'An error has occurred while reading the file' });
         }
       })
       .on('error', (err) => {
-        res.status(500).json({ message: 'An error has occurred' });
+        res.status(500).json({ message: 'An error has occurred', err });
       });
   }
 
   async getPlayerById(req, res) {
-    const playerId = parseInt(req.params.playerId);
-    if (!Number.isInteger(parseInt(playerId))) {
-      return res.status(400).json({ message: 'Id must be numeric.' });
+    const playerId = parseInt(req.params.playerId, 10);
+    if (!Number.isInteger(parseInt(playerId, 10))) {
+      res.status(400).json({ message: 'Id must be numeric.' });
     }
     const readStream = fs.createReadStream(pathToFile);
 
@@ -46,22 +44,21 @@ export class PlayerController {
     readStream
       .on('data', (chunk) => {
         data += chunk;
-
       })
       .on('end', () => {
         try {
           const { players } = JSON.parse(data);
           const player = players.find((p) => p.id === playerId);
           if (!player) {
-            res.status(404).json({message: 'Player not found'});
+            res.status(404).json({ message: 'Player not found' });
           }
-            res.status(200).json(player);
+          res.status(200).json(player);
         } catch (err) {
-          res.status(400).json({ message: 'An error has occurred while reading the file'});
+          res.status(400).json({ message: 'An error has occurred while reading the file' });
         }
       })
       .on('error', (err) => {
-        res.status(500).json({ message: 'An error has occurred' });
+        res.status(500).json({ message: 'An error has occurred', err });
       });
   }
 
@@ -80,15 +77,17 @@ export class PlayerController {
             countryWithHighestRatio: getCountryWithHighestRatio(players),
             playersAverageBMI: getPlayersAverageBMI(players),
             playersHeightMedian: getPlayersHeightMedian(players),
-          }
+          };
 
           res.status(200).json(stats);
+        } catch (err) {
+          res.status(400).json({ message: err.message });
         }
-         catch (err) {
-          res.status(400).json({ message: err.message});
-        }})
+      })
       .on('error', (err) => {
         res.status(500).json({ message: 'An error has occurred', err });
       });
   }
 }
+
+export default PlayerController;
