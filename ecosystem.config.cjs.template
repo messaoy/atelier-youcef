@@ -9,7 +9,7 @@ module.exports = {
       merge_logs: true,
       type: "module",
       cwd: "/home/ec2-user/atelier-youcef",
-      interpreter: "node",`
+      interpreter: "node",
       env: {
         NODE_ENV: "production",
       },
