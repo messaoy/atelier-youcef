@@ -10,11 +10,11 @@ Finally, you will need to run the following commands:
 
 Three routes will be available to you on the port you configured (3000 default):
 
-- "/": the base route, which allows you to retrieve the list of players
+- "/players": the base route, which allows you to retrieve the list of players
 
-- "/:playerId": the route that allows you to retrieve the data of a single player
+- "/players/:playerId": the route that allows you to retrieve the data of a single player
 
-- "/stats": the route that allows you to retrieve the following stats in an object "stats": (Country with the highest win ratio, Average BMI of all players, Median height of players)
+- "/players/stats": the route that allows you to retrieve the following stats in an object "stats": (Country with the highest win ratio, Average BMI of all players, Median height of players)
 
 You also have several handy commands at your disposal, such as:
 
