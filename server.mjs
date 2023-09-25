@@ -6,6 +6,11 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+const pathToFile = process.env.DATA_FILE_PATH;
+
+if (!pathToFile || !pathToFile.length) {
+  throw new Error('Server require a path to the players data file to start');
+}
 
 app.use('/players', playerRouter);
 
