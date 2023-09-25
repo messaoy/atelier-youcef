@@ -28,11 +28,15 @@ const calculateRatioPerCountry = (countries) => {
 };
 
 const getCountryWithHighestRatio = (players) => {
-  const countries = utilsWrapper.formatCountriesObject(utilsWrapper.getUniqueCountriesArray(players));
-  const countriesWithMatchStats = utilsWrapper.setMatchResultPerCountry(players, countries);
-  const countriesWithRatioStats = utilsWrapper.calculateRatioPerCountry(countriesWithMatchStats);
+  const countries = utilsWrapper
+    .formatCountriesObject(utilsWrapper.getUniqueCountriesArray(players));
+  const countriesWithMatchStats = utilsWrapper
+    .setMatchResultPerCountry(players, countries);
+  const countriesWithRatioStats = utilsWrapper
+    .calculateRatioPerCountry(countriesWithMatchStats);
   return Object.keys(countriesWithRatioStats)
-    .reduce((a, b) => (countriesWithRatioStats[a].ratio > countriesWithRatioStats[b].ratio ? a : b));
+    .reduce((a, b) => (countriesWithRatioStats[a].ratio > countriesWithRatioStats[b].ratio
+      ? a : b));
 };
 
 const calculateBMIOfAPlayer = (playerData) => {

@@ -22,5 +22,5 @@ You also have several handy commands at your disposal, such as:
 - npm run logs (read PM2 logs)
 - npm run kill (destroy the PM2 instance)
 
-This project uses JavaScript, node v18.12.1, and Express v4.18.2.
+This project uses JavaScript, node v18.12.1, and Express v4.18.2. It also use Airbnb-config for ES Lint
 
