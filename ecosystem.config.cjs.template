@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: "atelier-youcef",
-      script: "server.js",
+      script: "server.mjs",
       instances: 1,
       exec_mode: "cluster",
       watch: true,
