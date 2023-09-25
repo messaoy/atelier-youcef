@@ -1,9 +1,6 @@
 import dotenv from 'dotenv';
 import fs from 'fs';
-import {
-  getCountryWithHighestRatio,
-  getPlayersAverageBMI, getPlayersHeightMedian,
-} from '../../utils/utils.js';
+import utilsWrapper from '../../utils/utils.mjs';
 
 dotenv.config();
 
@@ -20,11 +17,12 @@ class PlayerController {
       })
       .on('end', () => {
         try {
-          const { players } = JSON.parse(data);
-          const sortedPlayers = [...players].sort((a, b) => a.data.rank - b.data.rank);
-          res.status(200).json(sortedPlayers);
+          const dataParsed = utilsWrapper.checkFileData(data);
+          const { players } = dataParsed;
+          const sortedPlayersByRank = [...players].sort((a, b) => a.data.rank - b.data.rank);
+          res.status(200).json(sortedPlayersByRank);
         } catch (err) {
-          res.status(400).json({ message: 'An error has occurred while reading the file' });
+          res.status(400).json({ message: err.message ? err.message : 'An error has occurred while reading the file' });
         }
       })
       .on('error', (err) => {
@@ -33,10 +31,10 @@ class PlayerController {
   }
 
   async getPlayerById(req, res) {
-    const playerId = parseInt(req.params.playerId, 10);
-    if (!Number.isInteger(parseInt(playerId, 10))) {
+    if (!Number.isInteger(parseInt(req.params.playerId, 10))) {
       res.status(400).json({ message: 'Id must be numeric.' });
     }
+    const playerId = parseInt(req.params.playerId, 10);
     const readStream = fs.createReadStream(pathToFile);
 
     let data = '';
@@ -47,14 +45,15 @@ class PlayerController {
       })
       .on('end', () => {
         try {
-          const { players } = JSON.parse(data);
+          const dataParsed = utilsWrapper.checkFileData(data);
+          const { players } = dataParsed;
           const player = players.find((p) => p.id === playerId);
           if (!player) {
             res.status(404).json({ message: 'Player not found' });
           }
           res.status(200).json(player);
         } catch (err) {
-          res.status(400).json({ message: 'An error has occurred while reading the file' });
+          res.status(400).json({ message: err.message ? err.message : 'An error has occurred while reading the file' });
         }
       })
       .on('error', (err) => {
@@ -72,16 +71,17 @@ class PlayerController {
       })
       .on('end', () => {
         try {
-          const { players } = JSON.parse(data);
+          const dataParsed = utilsWrapper.checkFileData(data);
+          const { players } = dataParsed;
           const stats = {
-            countryWithHighestRatio: getCountryWithHighestRatio(players),
-            playersAverageBMI: getPlayersAverageBMI(players),
-            playersHeightMedian: getPlayersHeightMedian(players),
+            countryWithHighestRatio: utilsWrapper.getCountryWithHighestRatio(players),
+            playersAverageBMI: utilsWrapper.getPlayersAverageBMI(players),
+            playersHeightMedian: utilsWrapper.getPlayersHeightMedian(players),
           };
 
-          res.status(200).json(stats);
+          res.status(200).json({ stats });
         } catch (err) {
-          res.status(400).json({ message: err.message });
+          res.status(400).json({ message: err.message ? err.message : 'An error has occurred while reading the file' });
         }
       })
       .on('error', (err) => {
