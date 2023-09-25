@@ -154,5 +154,11 @@ describe('Utils', () => {
         'The player must have a \'data\' property that is an object.',
       );
     });
+
+    it('should not throw an error when data is valid', () => {
+      expect(() => {
+        utilsWrapper.checkFileData(JSON.stringify(validData));
+      }).not.toThrow();
+    });
   });
 });
